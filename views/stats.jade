@@ -2,17 +2,16 @@
 
 block content
     h1= title
-    div
-        table(border='1')
-            thead
+    div.statsTable
+        table                         
+            tbody        
                 tr
-                    th Labeled
-                    th Unlabeled
-                    th Accepted
-                    th With Micro-Cuts
-                    th Discarded
-                    th Total
-            tbody            
+                    td Labeled
+                    td Unlabeled
+                    td Accepted
+                    td With Micro-Cuts
+                    td Discarded
+                    td Total    
                 tr
                     td= videoData.TL
                     td= videoData.TNL
@@ -21,18 +20,17 @@ block content
                     td= videoData.T3
                     td 
                         b #{videoData.total}
-    div
-        table(border='1')
-            thead
-                tr
-                    th Ranking
-                    th User
-                    th Labeled Videos
-                    th Accepted
-                    th With Micro-Cuts
-                    th Discarded
-                    th Pending
+    div.statsTable
+        table
             tbody
+                tr
+                    td Ranking
+                    td User
+                    td Labeled Videos
+                    td Accepted
+                    td With Micro-Cuts
+                    td Discarded
+                    td Pending           
                 each row, i in userData                    
                     tr
                         if row.labeler == username
