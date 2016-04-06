@@ -1,16 +1,23 @@
 ﻿extends layout
 
 block content
-    h1= title
-    p Video ID: #{videoID}
-    p User: #{username}
-    p #{error}
-    video(src="#{videoURL}", controls)
-    form(action="/video/#{videoID}", method="post")    
-        div.input  
-            input(type="hidden", value="0", name="label_value", id="label")  
-        div.actions            
-            input(type="submit", value="Discard", onclick="javascript:document.getElementById('label').value='1';return true;")
-            input(type="submit", value="Correct", onclick="javascript:document.getElementById('label').value='2';return true;")
-            input(type="submit", value="Have Micro Cuts", onclick="javascript:document.getElementById('label').value='3';return true;")
-            input(type="submit", value="Skip this video", onclick="javascript:document.getElementById('label').value='-1';return true;")
+    .container
+        header 
+            h1 Video Labeling
+            .logout 
+                a(href="/") Instructions
+                a(href="/stats") Statistics
+                a(href="/signout") Logout #{username} 
+        .body           
+            p 
+                b Video ID: #{videoID}
+
+            p #{error}    
+
+            form(action="/video/#{videoID}", method="post")                
+                input(type="hidden", value="0", name="label_value", id="label")                             
+                button(type="submit", onclick="javascript:document.getElementById('label').value='1';return true;") Correct
+                button(type="submit", onclick="javascript:document.getElementById('label').value='2';return true;") Discard                
+                button(type="submit", onclick="javascript:document.getElementById('label').value='3';return true;") Have Micro Cuts
+            p
+                | <video class="center" src="#{videoURL}" controls />

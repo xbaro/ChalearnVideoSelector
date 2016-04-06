@@ -1,46 +1,55 @@
 ﻿extends layout
 
 block content
-    h1= title
-    div.statsTable
-        table                         
-            tbody        
-                tr
-                    td Labeled
-                    td Unlabeled
-                    td Accepted
-                    td With Micro-Cuts
-                    td Discarded
-                    td Total    
-                tr
-                    td= videoData.TL
-                    td= videoData.TNL
-                    td= videoData.T1
-                    td= videoData.T2
-                    td= videoData.T3
-                    td 
-                        b #{videoData.total}
-    div.statsTable
-        table
-            tbody
-                tr
-                    td Ranking
-                    td User
-                    td Labeled Videos
-                    td Accepted
-                    td With Micro-Cuts
-                    td Discarded
-                    td Pending           
-                each row, i in userData                    
-                    tr
-                        if row.labeler == username
-                            td: b #{i+1}
-                            td: b #{row.labeler}
-                        else 
-                            td= i+1
-                            td= row.labeler
-                        td= row.TL
-                        td= row.T1
-                        td= row.T2
-                        td= row.T3
-                        td= row.TNL
+    .container
+        header 
+            h1 Video Statistics
+            .logout 
+                a(href="/") Instructions
+                a(href="/video") Video Labeling
+                a(href="/signout") Logout #{username}                 
+        .body
+            h2 Video Distribution
+            div.statsTable
+                table                         
+                    tbody        
+                        tr
+                            td Labeled
+                            td Unlabeled
+                            td Accepted
+                            td Rejected
+                            td With Micro-Cuts                            
+                            td Total    
+                        tr
+                            td= videoData.TL
+                            td= videoData.TNL
+                            td= videoData.TAccepted
+                            td= videoData.TRejected
+                            td= videoData.TMicroCuts
+                            td 
+                                b #{videoData.total}
+            h2 User Activity
+            div.statsTable
+                table
+                    tbody
+                        tr
+                            td Ranking
+                            td User
+                            td Labeled Videos
+                            td Accepted
+                            td Rejected
+                            td With Micro-Cuts                            
+                            td Pending           
+                        each row, i in userData                    
+                            tr
+                                if row.labeler == username
+                                    td: b #{i+1}
+                                    td: b #{row.labeler}
+                                else 
+                                    td= i+1
+                                    td= row.labeler
+                                td= row.TL
+                                td= row.TAccepted
+                                td= row.TRejected
+                                td= row.TMicroCuts
+                                td= row.TNL

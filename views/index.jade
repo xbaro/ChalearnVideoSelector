@@ -1,5 +1,29 @@
 ﻿extends layout
 
-block content
-  h1= title
-  p Welcome to #{title}
+block content  
+   .container
+        header 
+            h1 Instructions
+            .logout 
+                a(href="/video") Video Labeling
+                a(href="/stats") Statistics
+                a(href="/signout") Logout #{username} 
+        .body           
+            p 
+                Each valid videoclip of 15 seconds:
+                ol
+                    li MUST contain one unique person as foreground at a safe distance from the camera.
+                    li MUST contain audio and a clear visibility of images.
+                    li MUST contain people above > 13-15 years old. Non-identified babies appearing with the parents might be allowed carefully (as a "challenging" problem).
+                    li MUST not contain too much camera movement (changing background is allowed as "challenging", but avoid foreground constantly blurred).
+                    li MUST not contain adult or violent content (except people just talking about sex, such as stands of tuppersex or related answers of the Q&A). Discard any doubtful or problematic content.
+                    li MUST not contain nude (except if only parts above shoulders and neck are visible).
+
+                Then, only if previous MUSTs are accomplished:
+                ul
+                    li MIGHT have people on the background (crowd, audience…).
+                    li SHOULD be as continuous as possible (without gaps). Those videoclips with gaps MUST be classified as “gaps” (yellow button?), whereas those without gaps are normally classified as “no gaps” (green button?).
+                    li SHOULD avoid publicity and people talking about product names.
+
+            p 
+                b The remainder videoclips MUST be discarded.

@@ -1,5 +1,11 @@
 ﻿extends layout
 
 block content
-  h1 Well done!
-  p Thanks #{username}, all the videos have been labeled.
+    .container
+        header 
+            h1 Well Done, all images processed
+            .logout 
+                a(href="/stats") Statistics
+                a(href="/signout") Logout #{username} 
+        .body                       
+            img(src="/images/welldone.jpg")

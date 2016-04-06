@@ -7,7 +7,8 @@
   height: 100%
 
 a
-  color: #00B7FF
+  color: #000;
+  margin: 10px;
 
 body 
   background: #a79d9b
@@ -61,8 +62,7 @@ form button
   position: relative
   margin-top: 30px
   margin-bottom: 30px
-  left: 50%
-  transform: translate(-50%, 0)
+  margin-left: 15px;
   font-family: inherit
   color: white;
   background: #423a2f
@@ -79,4 +79,33 @@ form button
 form button:hover 
   background: #6fc343
 
+.container 
+  background: white
+  width: 80%
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7)
+  font-family: lato
+  position: relative
+  color: #333
+  border-radius: 10px
+
+.container header 
+  background: #f28c09
+  padding: 30px 20px
+  color: white
+  font-size: 1.2em
+  font-weight: 600
+  border-radius: 10px 10px 0 0
+
+.container .body
+  width: auto
+  padding: 30px
+
+.logout
+  position:absolute
+  right:0
+
+.center
+  margin: 0 auto
+  width: 800px
+    
 @import 'table.styl'
