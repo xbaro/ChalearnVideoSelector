@@ -1,0 +1,32 @@
+{
+  "name": "chalearn-video-selector",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "description": "ChalearnVideoSelector",
+  "repository": "github.com/xbaro/ChalearnVideoSelector.git",
+  "license": "MIT",
+  "author": {
+    "name": "Xavier Baró",
+    "email": "xbaro@uoc.edu"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.8.1",
+    "bookshelf": "^0.9.4",
+    "cookie-parser": "~1.3.3",
+    "debug": "~2.0.0",
+    "express": "~4.9.0",
+    "express-mysql-session": "^1.0.0-rc.0",
+    "express-session": "^1.13.0",
+    "jade": "~1.6.0",
+    "knex": "^0.10.0",
+    "morgan": "~1.3.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "serve-favicon": "~2.1.3",
+    "stylus": "0.42.3"
+  }
+}

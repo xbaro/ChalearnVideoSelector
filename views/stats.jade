@@ -1,0 +1,48 @@
+﻿extends layout
+
+block content
+    h1= title
+    div
+        table(border='1')
+            thead
+                tr
+                    th Labeled
+                    th Unlabeled
+                    th Accepted
+                    th With Micro-Cuts
+                    th Discarded
+                    th Total
+            tbody            
+                tr
+                    td= videoData.TL
+                    td= videoData.TNL
+                    td= videoData.T1
+                    td= videoData.T2
+                    td= videoData.T3
+                    td 
+                        b #{videoData.total}
+    div
+        table(border='1')
+            thead
+                tr
+                    th Ranking
+                    th User
+                    th Labeled Videos
+                    th Accepted
+                    th With Micro-Cuts
+                    th Discarded
+                    th Pending
+            tbody
+                each row, i in userData                    
+                    tr
+                        if row.labeler == username
+                            td: b #{i+1}
+                            td: b #{row.labeler}
+                        else 
+                            td= i+1
+                            td= row.labeler
+                        td= row.TL
+                        td= row.T1
+                        td= row.T2
+                        td= row.T3
+                        td= row.TNL
