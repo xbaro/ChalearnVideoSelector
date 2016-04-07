@@ -1,7 +1,7 @@
 ﻿var DB = require('./db').DB;
 
 /*
-CREATE TABLE `tblusers` (
+CREATE TABLE `tblUsers` (
   `userId` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(100) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
@@ -16,7 +16,7 @@ var User = DB.Model.extend({
 });
 
 /*
-CREATE TABLE `tblsessions` (
+CREATE TABLE `tblSessions` (
   `session_id` varchar(255) COLLATE utf8_bin NOT NULL,
   `expires` int(11) unsigned NOT NULL,
   `data` text COLLATE utf8_bin,
@@ -30,7 +30,7 @@ var Session = DB.Model.extend({
 
 
 /*
- CREATE TABLE `tblvideos` ( 
+ CREATE TABLE `tblVideos` ( 
   `videoId` int(11) NOT NULL AUTO_INCREMENT,
   `path` varchar(512) DEFAULT NULL,  
   `labeler` varchar(100), 
