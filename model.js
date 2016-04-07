@@ -5,6 +5,7 @@ CREATE TABLE `tblusers` (
   `userId` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(100) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
+  `admin` boolean not null default 0,
   PRIMARY KEY (`userId`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
@@ -45,8 +46,22 @@ var Video = DB.Model.extend({
     idAttribute: 'videoId'
 });
 
+
+/*
+ CREATE TABLE `tblConfig` (   
+  `key` varchar(50) not null,  
+  `value` varchar(512) not null,    
+  PRIMARY KEY (`key`)      
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+ */
+var Config = DB.Model.extend({
+    tableName: 'tblConfig',
+    idAttribute: 'key'
+});
+
 module.exports = {
     User: User,
     Session: Session,
-    Video: Video
+    Video: Video,
+    Config: Config
 };

@@ -1,0 +1,28 @@
+﻿extends layout
+
+block content  
+   .container
+        header 
+            h1 Administration
+            .logout 
+                a(href="/") Instructions
+                a(href="/video") Video Labeling
+                a(href="/stats") Statistics                
+                a(href="/signout") Logout #{user.attributes.username}                
+        .body    
+            if(message)
+                div
+                    p #{message}
+            form(role='form', action="/admin/set/videoPath", method="post")
+                header Videos Path
+                label Path
+                input.form-control(type='text', name="value", placeholder='Enter absolute path')                
+                button.btn.btn-default(type='submit') Set
+            form(role='form', action="/admin/resetDB", method="post")
+                header Reset the Videos from Database                                
+                button.btn.btn-default(type='submit') RESET
+            form(role='form', action="/admin/load", method="post")
+                header Load videos from path                                
+                button.btn.btn-default(type='submit') LOAD
+            
+                

@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/video');
+var admin = require('./routes/admin');
 
 /* BEGIN: Add session and user required modules */
 var session = require('express-session');
@@ -92,6 +93,7 @@ app.use(passport.session());
 
 app.use('/', routes);
 app.use('/video', users);
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

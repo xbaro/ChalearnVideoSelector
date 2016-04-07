@@ -7,8 +7,6 @@ var fs = require('fs'),
 var Model = require('../model');
 var DB = require('../db');
 
-var videoPath = "C:\\Users\\Xavier\\Desktop\\Programacio\\FP\\videos";
-
 /* GET not labeled video. */
 router.get('/', function (req, res) {    
     if (!req.isAuthenticated()) {
@@ -63,36 +61,46 @@ router.get('/:videoID', function (req, res) {
     
     var videoID = req.params.videoID;
     
-    var videoData = new Model.Video({ videoId: videoID }).fetch();
+    var videoPathReq = new Model.Config({ key: 'videoPath' }).fetch();
     
-    return videoData.then(function (model) {        
+    return videoPathReq.then(function (model) {
         if (model) {
-            var file = path.resolve(videoPath, model.attributes.path);
-            var range = req.headers.range;
-            var positions = range.replace(/bytes=/, "").split("-");
-            var start = parseInt(positions[0], 10);
-            
-            fs.stat(file, function (err, stats) {
-                var total = stats.size;
-                var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
-                var chunksize = (end - start) + 1;
-                
-                res.writeHead(206, {
-                    "Content-Range": "bytes " + start + "-" + end + "/" + total,
-                    "Accept-Ranges": "bytes",
-                    "Content-Length": chunksize,
-                    "Content-Type": "video/mp4"
-                });
-                
-                var stream = fs.createReadStream(file, { start: start, end: end })
-                    .on("open", function () {
-                    stream.pipe(res);
-                }).on("error", function (err) {
-                    res.end(err);
-                });
+            var videoPath = model.attributes.value;
+            var videoData = new Model.Video({ videoId: videoID }).fetch();
+            return videoData.then(function (model) {
+                if (model) {
+                    var file = path.resolve(videoPath, model.attributes.path);
+                    var range = req.headers.range;
+                    var positions = range.replace(/bytes=/, "").split("-");
+                    var start = parseInt(positions[0], 10);
+                    
+                    fs.stat(file, function (err, stats) {
+                        var total = stats.size;
+                        var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+                        var chunksize = (end - start) + 1;
+                        
+                        res.writeHead(206, {
+                            "Content-Range": "bytes " + start + "-" + end + "/" + total,
+                            "Accept-Ranges": "bytes",
+                            "Content-Length": chunksize,
+                            "Content-Type": "video/mp4"
+                        });
+                        
+                        var stream = fs.createReadStream(file, { start: start, end: end })
+                        .on("open", function () {
+                            stream.pipe(res);
+                        }).on("error", function (err) {
+                            res.end(err);
+                        });
+                    });
+                } else {
+                    res.render('error', { message: 'Invalid videoID' , error: {}});
+                }
             });
+        } else {
+            res.render('error', { message: 'videoPath configuration value not found', error: {}});
         }
-    });
+        });
 });
 
 /* POST new label. */
@@ -116,7 +124,7 @@ router.post('/:videoID', function (req, res) {
             if (numRows == 1) {
                 res.redirect('/video');
             } else {
-                res.render('error', { message: 'Error updating. NumRows=' + numRows });
+                res.render('error', { message: 'Error updating. NumRows=' + numRows, error: {} });
             }
         })
     }

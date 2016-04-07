@@ -7,7 +7,13 @@ block content
             .logout 
                 a(href="/video") Video Labeling
                 a(href="/stats") Statistics
-                a(href="/signout") Logout #{username} 
+                if (user)                    
+                    a(href="/signout") Logout #{user.attributes.username} 
+                    if(user.attributes.admin)
+                        a(href="/admin") ADMIN
+                else
+                    a(href="/signin") Login 
+                    a(href="/signup") Register 
         .body           
             p 
                 Each valid videoclip of 15 seconds:

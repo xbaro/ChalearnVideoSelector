@@ -9,7 +9,7 @@ var DB = require('../db');
 
 /* GET home page. */
 router.get('/', function (req, res) {
-    res.render('index', { title: 'Chalearn Video Selector' });    
+    res.render('index', { title: 'Chalearn Video Selector', user : req.user });
 });
 
 router.get('/stats', function (req, res) {
@@ -37,7 +37,7 @@ router.get('/signin', function (req, res, next) {
 
 router.post('/signin', function (req, res, next) {
     passport.authenticate('local', {
-        successRedirect: '/video',
+        successRedirect: '/',
         failureRedirect: '/signin'
     }, function (err, user, info) {
         if (err) {
@@ -59,7 +59,7 @@ router.post('/signin', function (req, res, next) {
 
 router.get('/signup', function (req, res, next) {
     if (req.isAuthenticated()) {
-        res.redirect('/video');
+        res.redirect('/');
     } else {
         res.render('signup', { title: 'Sign Up' });
     }
@@ -92,7 +92,7 @@ router.get('/signout', function (req, res, next) {
         notFound404(req, res, next);
     } else {
         req.logout();
-        res.redirect('/signin');
+        res.redirect('/');
     }
 });
 
