@@ -55,7 +55,7 @@ router.post('/resetDB', function (req, res) {
             res.render('error', { message: 'Unauthorized access', error: {} });
         } else {
             var knex = DB.DB.knex;
-            knex('tblvideos').del().then(function (numRows) {
+            knex('tblVideos').del().then(function (numRows) {
                 res.render('admin', { user: req.user, message: "Reset performed. " + numRows + " rows deleted." });
             });
         }

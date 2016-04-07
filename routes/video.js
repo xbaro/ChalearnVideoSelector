@@ -20,16 +20,16 @@ router.get('/', function (req, res) {
         
         knex.transaction(function (trx) {
             return trx
-            .select('*').from('tblvideos').where(function () {
+            .select('*').from('tblVideos').where(function () {
                 this.where('labeler', username).andWhere('labeled', 0)
             }).then(function (video) {
                 if (video.length == 0) {
-                    return trx.select(knex.raw("count(*) as nvideos")).from('tblvideos').where('labeler', null).then(function (nvideos) {
+                    return trx.select(knex.raw("count(*) as nvideos")).from('tblVideos').where('labeler', null).then(function (nvideos) {
                         // Get a random displacement
                         rnd=Math.round(Math.random() * (nvideos[0].nvideos-1));
-                        return trx.select('*').from('tblvideos').where('labeler', null).limit(1).offset(rnd).update({ labeler: username }).then(function (nrows) {
+                        return trx.select('*').from('tblVideos').where('labeler', null).limit(1).offset(rnd).update({ labeler: username }).then(function (nrows) {
                             if (nrows == 1) {
-                                knex.select('*').from('tblvideos').where(function () {
+                                knex.select('*').from('tblVideos').where(function () {
                                     this.where('labeler', username).andWhere('labeled', 0)
                                 }).then(function (video) {
                                     videoID = video[0].videoId;
@@ -112,7 +112,7 @@ router.post('/:videoID', function (req, res) {
     var knex = DB.DB.knex;
     
     if (label > 0) {
-        knex.select('*').from('tblvideos').where('labeler', username).andWhere('labeled', 0).update({ label: label, labeled: 1 }).then(function (numRows) {
+        knex.select('*').from('tblVideos').where('labeler', username).andWhere('labeled', 0).update({ label: label, labeled: 1 }).then(function (numRows) {
             if (numRows == 1) {
                 res.redirect('/video');
             } else {
@@ -120,7 +120,7 @@ router.post('/:videoID', function (req, res) {
             }
         })
     } else {
-        knex.select('*').from('tblvideos').where('labeler', username).andWhere('labeled', 0).update({labeler: null}).then(function (numRows) {
+        knex.select('*').from('tblVideos').where('labeler', username).andWhere('labeled', 0).update({labeler: null}).then(function (numRows) {
             if (numRows == 1) {
                 res.redirect('/video');
             } else {
