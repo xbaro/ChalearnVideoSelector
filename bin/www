@@ -1,4 +1,5 @@
 ﻿#!/usr/bin/env node
+require('monitor').start();
 var debug = require('debug')('ChalearnVideoSelector');
 var app = require('../app');
 
