@@ -99,4 +99,24 @@ router.post('/load', function (req, res) {
     }
 });
 
+/* GET . */
+router.post('/export', function (req, res) {
+    if (!req.isAuthenticated()) {
+        res.redirect('/auth/signin');
+    } else {
+        if (!req.user.attributes.admin) {
+            res.status(401);
+            res.render('error', { message: 'Unauthorized access', error: {} });
+        } else {
+            var videoPathReq = new Model.Config({ key: 'videoPath' }).fetch();
+            return videoPathReq.then(function (model) {
+                if (model) {
+                    var videoPath = model.attributes.value;
+
+                }
+            });
+        }
+    }
+});
+
 module.exports = router;
