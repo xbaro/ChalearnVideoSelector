@@ -8,28 +8,73 @@ block content
                 a(href="/video") Video Labeling
                 a(href="/stats") Statistics
                 if (user)                    
-                    a(href="/signout") Logout #{user.attributes.username} 
+                    a(href="/auth/signout") Logout #{user.attributes.username} 
                     if(user.attributes.admin)
                         a(href="/admin") ADMIN
                 else
-                    a(href="/signin") Login 
-                    a(href="/signup") Register 
+                    a(href="/auth/signin") Login 
+                    a(href="/auth/signup") Register 
         .body           
             p 
-                Each valid videoclip of 15 seconds:
+                u
+                    b 
+                        span(style="color:rgb(0,176,80)") Valid                    
+                        | video label 
+                    | of 15 seconds:
                 ol
                     li MUST contain one unique person as foreground at a safe distance from the camera.
                     li MUST contain audio and a clear visibility of images.
-                    li MUST contain people above > 13-15 years old. Non-identified babies appearing with the parents might be allowed carefully (as a "challenging" problem).
-                    li MUST not contain too much camera movement (changing background is allowed as "challenging", but avoid foreground constantly blurred).
-                    li MUST not contain adult or violent content (except people just talking about sex, such as stands of tuppersex or related answers of the Q&A). Discard any doubtful or problematic content.
-                    li MUST not contain nude (except if only parts above shoulders and neck are visible).
-
-                Then, only if previous MUSTs are accomplished:
-                ul
-                    li MIGHT have people on the background (crowd, audience…).
-                    li SHOULD be as continuous as possible (without gaps). Those videoclips with gaps MUST be classified as “gaps” (yellow button?), whereas those without gaps are normally classified as “no gaps” (green button?).
-                    li SHOULD avoid publicity and people talking about product names.
-
-            p 
-                b The remainder videoclips MUST be discarded.
+                    li MUST be only English speaking.
+                    li MUST contain people above &gt; 13-15 years old. Non-identified babies appearing with the parents might be allowed carefully (as a "challenging" problem).
+                    li MUST NOT contain too much camera movement (changing background is allowed as "challenging", but avoid foreground constantly blurred).
+                    li MUST NOT contain adult or violent content (except people just talking about sex, such as stands of tuppersex or related answers of the Q&amp;A). Discard any doubtful or problematic content.
+                    li MUST NOT contain nude (except if only parts above shoulders and neck are visible).
+                    li MIGHT have people on the background (crowd, audience, without talking, with low resolution of faces to avoid any confusion with the speaker…).
+                    li MUST NOT not give information (nor visual nor audio) about product or company names.
+                    li MUST be COMPLETELY continuous, without visual-audio gaps.
+            p
+                u
+                    b
+                        span(style="color:rgb(255,192,0)") Valid-Cut                    
+                        | video label 
+                    | of 15 seconds:
+                ol
+                    li MUST satisfy 1-9 
+                        b Valid video label 
+                        | items.
+                    li It does not satisfy 
+                        b Valid video label
+                        | item 9 but audio-visual gaps are extremely short and almost difficult to perceive by human eye.
+            p
+                u
+                    b
+                        span(style="color:red") Non-Valid                    
+                        | video label 
+                    | of 15 seconds:
+                ol
+                    li Any video not classified as 
+                        b Valid or Valid-Cut.            
+             div.statsTable(style="width=auto;")
+                table(width="80%")                   
+                    tbody
+                        tr
+                            td 
+                                h1 Example videos for each label
+                        tr
+                            td 
+                                h2 Valid
+                        tr                        
+                            td
+                                video(class="center" src="/images/accept.mp4" width="320" height="240" controls)
+                        tr
+                            td 
+                                h2 Valid-Cut
+                        tr
+                            td
+                                video(class="center" src="/images/micro-cuts.mp4" width="320" height="240" controls)
+                        tr
+                            td 
+                                h2 Not-Valid
+                        tr
+                            td            
+                                video(class="center" src="/images/reject.mp4" width="320" height="240" controls)

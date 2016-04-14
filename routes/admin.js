@@ -10,7 +10,7 @@ var DB = require('../db');
 /* GET not labeled video. */
 router.get('/', function (req, res) {    
     if (!req.isAuthenticated()) {
-        res.redirect('/signin');
+        res.redirect('/auth/signin');
     } else {
         if (!req.user.attributes.admin) {
             res.status(401);
@@ -24,7 +24,7 @@ router.get('/', function (req, res) {
 /* POST key value. */
 router.post('/set/:key', function (req, res) {
     if (!req.isAuthenticated()) {
-        res.redirect('/signin');
+        res.redirect('/auth/signin');
     } else {
         if (!req.user.attributes.admin) {
             res.status(401);
@@ -48,7 +48,7 @@ router.post('/set/:key', function (req, res) {
 /* GET . */
 router.post('/resetDB', function (req, res) {
     if (!req.isAuthenticated()) {
-        res.redirect('/signin');
+        res.redirect('/auth/signin');
     } else {
         if (!req.user.attributes.admin) {
             res.status(401);
@@ -65,7 +65,7 @@ router.post('/resetDB', function (req, res) {
 /* GET . */
 router.post('/load', function (req, res) {
     if (!req.isAuthenticated()) {
-        res.redirect('/signin');
+        res.redirect('/auth/signin');
     } else {
         if (!req.user.attributes.admin) {
             res.status(401);

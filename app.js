@@ -4,10 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+//var forceSSL = require('express-force-ssl');
 
 var routes = require('./routes/index');
 var users = require('./routes/video');
 var admin = require('./routes/admin');
+var auth = require('./routes/auth');
 
 /* BEGIN: Add session and user required modules */
 var session = require('express-session');
@@ -19,6 +21,10 @@ var Model = require('./model');
 /* END */
 
 var app = express();
+
+app.set('forceSSLOptions', {
+    enable301Redirects: false
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -94,6 +100,7 @@ app.use(passport.session());
 app.use('/', routes);
 app.use('/video', users);
 app.use('/admin', admin);
+app.use('/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

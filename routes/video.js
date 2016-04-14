@@ -10,7 +10,7 @@ var DB = require('../db');
 /* GET not labeled video. */
 router.get('/', function (req, res) {    
     if (!req.isAuthenticated()) {
-        res.redirect('/signin');
+        res.redirect('/auth/signin');
     } else {
         var videoID = -1;
         var username = req.user.attributes.username;
@@ -58,75 +58,85 @@ router.get('/', function (req, res) {
 
 /* GET not labeled video. */
 router.get('/:videoID', function (req, res) {
-    
-    var videoID = req.params.videoID;
-    
-    var videoPathReq = new Model.Config({ key: 'videoPath' }).fetch();
-    
-    return videoPathReq.then(function (model) {
-        if (model) {
-            var videoPath = model.attributes.value;
-            var videoData = new Model.Video({ videoId: videoID }).fetch();
-            return videoData.then(function (model) {
-                if (model) {
-                    var file = path.resolve(videoPath, model.attributes.path);
-                    var range = req.headers.range;
-                    var positions = range.replace(/bytes=/, "").split("-");
-                    var start = parseInt(positions[0], 10);
-                    
-                    fs.stat(file, function (err, stats) {
-                        var total = stats.size;
-                        var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
-                        var chunksize = (end - start) + 1;
+    if (!req.isAuthenticated()) {
+        res.redirect('/auth/signin');
+    } else {
+        var videoID = req.params.videoID;
+        
+        var videoPathReq = new Model.Config({ key: 'videoPath' }).fetch();
+        
+        return videoPathReq.then(function (model) {
+            if (model) {
+                var videoPath = model.attributes.value;
+                var videoData = new Model.Video({ videoId: videoID }).fetch();
+                return videoData.then(function (model) {
+                    if (model) {
+                        var file = path.resolve(videoPath, model.attributes.path);
+                        var range = req.headers.range;
+                        var positions = range.replace(/bytes=/, "").split("-");
+                        var start = parseInt(positions[0], 10);
                         
-                        res.writeHead(206, {
-                            "Content-Range": "bytes " + start + "-" + end + "/" + total,
-                            "Accept-Ranges": "bytes",
-                            "Content-Length": chunksize,
-                            "Content-Type": "video/mp4"
+                        fs.stat(file, function (err, stats) {
+                            
+                            if (!err) {
+                                var total = stats.size;
+                                var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+                                var chunksize = (end - start) + 1;
+                                
+                                res.writeHead(206, {
+                                    "Content-Range": "bytes " + start + "-" + end + "/" + total,
+                                    "Accept-Ranges": "bytes",
+                                    "Content-Length": chunksize,
+                                    "Content-Type": "video/mp4"
+                                });
+                                
+                                var stream = fs.createReadStream(file, { start: start, end: end })
+                                .on("open", function () {
+                                    stream.pipe(res);
+                                }).on("error", function (err) {
+                                    res.end(err);
+                                });
+                            }
                         });
-                        
-                        var stream = fs.createReadStream(file, { start: start, end: end })
-                        .on("open", function () {
-                            stream.pipe(res);
-                        }).on("error", function (err) {
-                            res.end(err);
-                        });
-                    });
-                } else {
-                    res.render('error', { message: 'Invalid videoID' , error: {}});
-                }
-            });
-        } else {
-            res.render('error', { message: 'videoPath configuration value not found', error: {}});
-        }
+                    } else {
+                        res.render('error', { message: 'Invalid videoID' , error: {} });
+                    }
+                });
+            } else {
+                res.render('error', { message: 'videoPath configuration value not found', error: {} });
+            }
         });
+    }
 });
 
 /* POST new label. */
 router.post('/:videoID', function (req, res) {
-    var videoID = req.params.videoID;
-    var username = req.user.attributes.username;
-    var label = req.body.label_value;
-    
-    var knex = DB.DB.knex;
-    
-    if (label > 0) {
-        knex.select('*').from('tblVideos').where('labeler', username).andWhere('labeled', 0).update({ label: label, labeled: 1 }).then(function (numRows) {
-            if (numRows == 1) {
-                res.redirect('/video');
-            } else {
-                res.render('error', { message: 'Error updating. NumRows=' + numRows });
-            }
-        })
+    if (!req.isAuthenticated()) {
+        res.redirect('/auth/signin');
     } else {
-        knex.select('*').from('tblVideos').where('labeler', username).andWhere('labeled', 0).update({labeler: null}).then(function (numRows) {
-            if (numRows == 1) {
-                res.redirect('/video');
-            } else {
-                res.render('error', { message: 'Error updating. NumRows=' + numRows, error: {} });
-            }
-        })
+        var videoID = req.params.videoID;
+        var username = req.user.attributes.username;
+        var label = req.body.label_value;
+        
+        var knex = DB.DB.knex;
+        
+        if (label > 0) {
+            knex.select('*').from('tblVideos').where('labeler', username).andWhere('labeled', 0).update({ label: label, labeled: 1 }).then(function (numRows) {
+                if (numRows == 1) {
+                    res.redirect('/video');
+                } else {
+                    res.render('error', { message: 'Error updating. NumRows=' + numRows });
+                }
+            })
+        } else {
+            knex.select('*').from('tblVideos').where('labeler', username).andWhere('labeled', 0).update({ labeler: null }).then(function (numRows) {
+                if (numRows == 1) {
+                    res.redirect('/video');
+                } else {
+                    res.render('error', { message: 'Error updating. NumRows=' + numRows, error: {} });
+                }
+            })
+        }
     }
 });
 

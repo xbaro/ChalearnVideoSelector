@@ -1,7 +1,7 @@
 ﻿extends layout
 
 block content  
-    form(role='form', action="/signup", method="post")
+    form(role='form', action="/auth/signup", method="post")
         header Register
         label Username
         input.form-control(type='text', name="username", placeholder='Enter Username')
