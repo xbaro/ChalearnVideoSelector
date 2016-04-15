@@ -17,5 +17,13 @@ router.get('/', function (req, res) {
     }    
 });
 
+router.get('/stats', function (req, res) {
+    if (req.secure) {
+        // request was via https, so redirect to http
+        res.redirect('http://' + req.headers.host + req.originalUrl);
+    } else {
+        res.render('stats', { title: 'Statistics', user : req.user });
+    }
+});
 
 module.exports = router;
