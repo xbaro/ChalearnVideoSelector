@@ -30,16 +30,18 @@ var Session = DB.Model.extend({
 
 
 /*
- CREATE TABLE `tblVideos` ( 
+ CREATE TABLE `tblVideos` (
   `videoId` int(11) NOT NULL AUTO_INCREMENT,
-  `path` varchar(512) DEFAULT NULL,  
-  `labeler` varchar(100), 
-  `labeled` boolean not null default 0,
+  `path` varchar(200) NOT NULL,
+  `labeler` varchar(100) DEFAULT NULL,
+  `labeled` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `label` char(1) DEFAULT NULL,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `modified_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`videoId`)      
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`videoId`),
+  UNIQUE KEY `path_UNIQUE` (`path`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+
  */
 var Video = DB.Model.extend({
     tableName: 'tblVideos',
