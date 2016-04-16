@@ -19,9 +19,11 @@ var exportFile = function (inFile, outFile, videoID) {
                 if (!model) {
                     console.error('Error updating exportation flag of video ' + videoID);
                 }
+                return;
             });
         }
-    });         
+    });
+    return;
 }
 
 /* GET not labeled video. */
@@ -118,6 +120,7 @@ router.post('/load', function (req, res) {
                                     if (!model) {
                                         res.render('error', { message: 'Error adding file: ' + video, error: {} });
                                     }
+                                    return;
                                 }).catch(function (err) {
                                     // Video already exists, we do nothing.                                        
                                 });
@@ -126,10 +129,12 @@ router.post('/load', function (req, res) {
                         } else {
                             res.render('error', { message: 'videoPath configuration value is incorrect', error: {} });
                         }
+                        return;
                     });                                     
                 } else {
                     res.render('error', { message: 'videoPath configuration value not found', error: {} });
                 }
+                return;
             });
         }
     }
@@ -171,7 +176,7 @@ router.post('/backup', function (req, res) {
                             }                        
                         })
                     }
-                
+                    return;
                 });
          }
     }
@@ -218,14 +223,17 @@ router.post('/export', function (req, res) {
                                 } else {
                                     res.render('admin', { user: req.user, message: 'No remaining labeled videos to export' });
                                 }
+                                return;
                             });
                         } else {
-                            res.render('admin', { user: req.user, message: 'Export path is not defined' });
+                            res.render('admin', { user: req.user, message: 'Export path is not defined' });                            
                         }
+                        return;
                     });
                 } else {
                     res.render('admin', { user: req.user, message: 'Video path is not defined' });
                 }
+                return;
             });
         }
     }
