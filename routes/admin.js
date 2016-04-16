@@ -118,6 +118,8 @@ router.post('/load', function (req, res) {
                                     if (!model) {
                                         res.render('error', { message: 'Error adding file: ' + video, error: {} });
                                     }
+                                }).catch(function (err) {
+                                    // Video already exists, we do nothing.                                        
                                 });
                             }
                             res.render('admin', { user: req.user, message: videos.length + " videos loaded" });
