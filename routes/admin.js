@@ -1,4 +1,5 @@
 ﻿var express = require('express');
+var sync = require('synchronize')
 var router = express.Router();
 
 var fs = require('fs-extra'),    
@@ -7,6 +8,66 @@ var fs = require('fs-extra'),
 var Model = require('../model');
 var DB = require('../db');
 
+
+var insertVideos2 = function (videos) {        
+    var rows= videos.map(function (obj) {
+        return { path: obj };
+    });    
+    console.log(rows);
+    var chunkSize = 1000;
+    var knex = DB.DB.knex;
+
+    knex.batchInsert('tblVideos', rows, chunkSize)
+        .then(function () {
+            console.log('Loaded ' + rows.length + ' videos');
+        }).catch(function(error) {
+            console.error(error)
+        });
+    return;
+}
+
+var insertVideos3 = function (videos) {
+    for (var i = 0, len = videos.length; i < len; i++) {
+        var videoModel = new Model.Video({ path: videos[i] });
+        videoModel.save().then(function (model) {
+            if (!model) {
+                res.render('error', { message: 'Error adding file: ' + video, error: {} });
+            }
+            return;
+        }).catch(function (err) {
+            // Video already exists, we do nothing.                                        
+        });
+    }
+    return;
+}
+
+var insertVideos = function (videos) {
+    var rows = [];
+    sync.fiber(function () {
+        for (var i = 0, len = videos.length; i < len; i++) {
+            var data = sync.await(new Model.Video({ path: videos[i] }).fetch().asCallback(sync.defers()));
+            if (data) {
+                if (!data[0]) {
+                    rows.push({ path: videos[i] });
+                }
+            } else {
+                rows.push({ path: videos[i] })
+            }        
+        }
+
+        var chunkSize = 1000;
+        var knex = DB.DB.knex;
+        
+        knex.batchInsert('tblVideos', rows, chunkSize)
+        .then(function () {
+            console.log('Loaded ' + rows.length + ' videos');
+        }).catch(function (error) {
+            console.error(error)
+        });
+    });
+        
+    return;
+}
 
 var exportFile = function (inFile, outFile, videoID) {
     fs.copy(inFile, outFile, function (err) {
@@ -114,17 +175,7 @@ router.post('/load', function (req, res) {
                     fs.lstat(videoPath, function (err, stats) {
                         if (!err && stats.isDirectory()) {
                             var videos = fs.readdirSync(videoPath);
-                            for (var i = 0, len = videos.length; i < len; i++) {
-                                var videoModel = new Model.Video({ path: videos[i] });
-                                videoModel.save().then(function (model) {
-                                    if (!model) {
-                                        res.render('error', { message: 'Error adding file: ' + video, error: {} });
-                                    }
-                                    return;
-                                }).catch(function (err) {
-                                    // Video already exists, we do nothing.                                        
-                                });
-                            }
+                            insertVideos(videos);
                             res.render('admin', { user: req.user, message: videos.length + " videos loaded" });
                         } else {
                             res.render('error', { message: 'videoPath configuration value is incorrect', error: {} });
