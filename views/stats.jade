@@ -16,9 +16,10 @@ block content
                         tr
                             td Labeled
                             td Unlabeled
-                            td Accepted
-                            td Rejected
-                            td With Micro-Cuts                            
+                            td Valid
+                            td Not-Valid
+                            td Valid-Cuts
+                            td Exported
                             td Total    
                         tr
                             td= videoData.TL
@@ -26,6 +27,7 @@ block content
                             td= videoData.TAccepted
                             td= videoData.TRejected
                             td= videoData.TMicroCuts
+                            td= videoData.TEXP
                             td 
                                 b #{videoData.total}
             h2 User Activity
@@ -36,10 +38,11 @@ block content
                             td Ranking
                             td User
                             td Labeled Videos
-                            td Accepted
-                            td Rejected
-                            td With Micro-Cuts                            
-                            td Pending           
+                            td Valid
+                            td Not-Valid
+                            td Valid-Cuts
+                            td Exported                            
+                            td Pending                                       
                         each row, i in userData                    
                             tr
                                 if row.labeler == username
@@ -52,4 +55,5 @@ block content
                                 td= row.TAccepted
                                 td= row.TRejected
                                 td= row.TMicroCuts
+                                td= row.TEXP
                                 td= row.TNL

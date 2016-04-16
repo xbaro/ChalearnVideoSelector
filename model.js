@@ -38,6 +38,7 @@ var Session = DB.Model.extend({
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `modified_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `label` char(1) DEFAULT NULL,
+  `exported` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`videoId`),
   UNIQUE KEY `path_UNIQUE` (`path`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
@@ -46,6 +47,10 @@ var Session = DB.Model.extend({
 var Video = DB.Model.extend({
     tableName: 'tblVideos',
     idAttribute: 'videoId'
+});
+
+var Videos = DB.Collection.extend({
+    model: Video
 });
 
 
@@ -65,5 +70,6 @@ module.exports = {
     User: User,
     Session: Session,
     Video: Video,
+    Videos: Videos,
     Config: Config
 };

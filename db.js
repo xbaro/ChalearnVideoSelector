@@ -2,6 +2,7 @@
 
 var config = {
     host: 'localhost',  // your host
+    port: 3306, // your port
     user: 'video_labeler', // your database user
     password: '.video_labeler.', // your database password
     database: 'video_labeler',
@@ -15,5 +16,5 @@ var knex = require('knex')({
 
 var DB = require('bookshelf')(knex);
 
-
+module.exports.Config = config;
 module.exports.DB = DB;

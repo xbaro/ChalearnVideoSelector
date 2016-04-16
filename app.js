@@ -66,12 +66,15 @@ passport.deserializeUser(function (username, done) {
     });
 });
 
+var dbconfig = require('./db').Config;
+
+
 var options = {
-    host: 'localhost',// Host name for database connection. 
-    port: 3306,// Port number for database connection. 
-    user: 'video_labeler', // your database user
-    password: '.video_labeler.', // your database password
-    database: 'video_labeler',    
+    host: dbconfig.host,
+    port: dbconfig.port,
+    user: dbconfig.user, 
+    password: dbconfig.password,
+    database: dbconfig.database,    
     checkExpirationInterval: 900000,// How frequently expired sessions will be cleared; milliseconds. 
     expiration: 86400000,// The maximum age of a valid session; milliseconds. 
     createDatabaseTable: true,// Whether or not to create the sessions database table, if one does not already exist. 

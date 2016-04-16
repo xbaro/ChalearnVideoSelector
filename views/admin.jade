@@ -18,13 +18,26 @@ block content
                 label Path
                 input.form-control(type='text', name="value", placeholder='Enter absolute path')                
                 button.btn.btn-default(type='submit') Set
+            form(role='form', action="/admin/set/backupPath", method="post")
+                header Backup Path
+                label Path
+                input.form-control(type='text', name="value", placeholder='Enter absolute path')                
+                button.btn.btn-default(type='submit') Set
+            form(role='form', action="/admin/set/exportPath", method="post")
+                header Export Path
+                label Path
+                input.form-control(type='text', name="value", placeholder='Enter absolute path')                
+                button.btn.btn-default(type='submit') Set
             form(role='form', action="/admin/resetDB", method="post")
                 header Reset the Videos from Database                                
                 button.btn.btn-default(type='submit') RESET
+            form(role='form', action="/admin/backup", method="post")
+                header Backup database to disk
+                button.btn.btn-default(type='submit') BACKUP
             form(role='form', action="/admin/load", method="post")
                 header Load videos from path                                
                 button.btn.btn-default(type='submit') LOAD
-             form(role='form', action="/admin/export", method="post")
+            form(role='form', action="/admin/export", method="post")
                 header Export labeled videos                                
                 button.btn.btn-default(type='submit') EXPORT
             

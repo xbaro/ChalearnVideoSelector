@@ -34,3 +34,5 @@ node_modules
 /ssl/*.key
 /ssl/*.crt
 /ssl/*.csr
+backup
+export
