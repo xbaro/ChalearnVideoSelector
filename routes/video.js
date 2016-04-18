@@ -120,24 +120,51 @@ router.post('/:videoID', function (req, res) {
         
         var knex = DB.DB.knex;
         
-        if (label > 0) {
-            knex.select('*').from('tblVideos').where('labeler', username).andWhere('labeled', 0).update({ label: label, labeled: 1 }).then(function (numRows) {
-                if (numRows == 1) {
+        if (label == -5) {
+            var videoReq = new Model.Videos().query(function (q) {
+                q.where('labeler', username);
+                q.orderBy('modified_at', 'DESC');
+                q.limit(2);
+            }).fetch();
+            return videoReq.then(function (model) {
+                if (model && model.length==2) {
+                    for (var i = 0, len = model.length; i < len; i++) {                         
+                        if (model.models[i].attributes.labeled=='1') {
+                            model.models[i].attributes.labeled = '0';
+                            model.models[i].attributes.label = null;
+                        } else {
+                            model.models[i].attributes.labeler = null;
+                        }
+                        model.models[i].save();
+                    }
                     res.redirect('/video');
                 } else {
-                    res.render('error', { message: 'Error updating. NumRows=' + numRows });
+                    res.render('error', { message: 'Unexpected number of rows', error: {}});
                 }
-            })
+                return;
+            });
         } else {
-            knex.select('*').from('tblVideos').where('labeler', username).andWhere('labeled', 0).update({ labeler: null }).then(function (numRows) {
-                if (numRows == 1) {
-                    res.redirect('/video');
-                } else {
-                    res.render('error', { message: 'Error updating. NumRows=' + numRows, error: {} });
-                }
-            })
+            if (label > 0) {
+                knex.select('*').from('tblVideos').where('labeler', username).andWhere('labeled', 0).update({ label: label, labeled: 1 }).then(function (numRows) {
+                    if (numRows == 1) {
+                        res.redirect('/video');
+                    } else {
+                        res.render('error', { message: 'Error updating. NumRows=' + numRows, error: {}});
+                    }
+                })
+            } else {
+                knex.select('*').from('tblVideos').where('labeler', username).andWhere('labeled', 0).update({ labeler: null }).then(function (numRows) {
+                    if (numRows == 1) {
+                        res.redirect('/video');
+                    } else {
+                        res.render('error', { message: 'Error updating. NumRows=' + numRows, error: {} });
+                    }
+                })
+            }
         }
     }
 });
+
+
 
 module.exports = router;
