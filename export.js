@@ -1,18 +1,28 @@
 ﻿var fs = require('fs-extra'),    
     url = require('url'),
     path = require('path');
-var Model = require('../model');
-var DB = require('../db');
+var Model = require('./model');
+var DB = require('./db');
 
-var videoPath = '';
-var exportPath = '';
+var videoPath = '/data/hupba/Datasets/YoutubeMonk/outputs/clips';
+var exportPath = './export_last';
+
 var labelTag = ['Error', 'Valid', 'NoValid', 'ValidCuts'];
 
 var exportFile = function (inFile, outFile, videoID) {
     fs.copy(inFile, outFile, function (err) {
         if (err) {
             console.error(err)
-        } 
+        } else {
+            // Update export flag
+            var expVideoModel = new Model.Video({ videoId: videoID, exported: '1' });
+            expVideoModel.save().then(function (model) {
+                if (!model) {
+                    console.error('Error updating exportation flag of video ' + videoID);
+                }
+                return;
+            });
+        }
     });
     return;
 }
