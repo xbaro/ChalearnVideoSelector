@@ -8,7 +8,6 @@ var videoPath = '/data/hupba/Datasets/YoutubeMonk/outputs/clips';
 var exportPath = './export_last';
 
 var labelTag = ['Error', 'Valid', 'NoValid', 'ValidCuts'];
-
 var exportFile = function (inFile, outFile, videoID) {
     fs.copy(inFile, outFile, function (err) {
         if (err) {
@@ -46,7 +45,7 @@ return videoReq.then(function (model) {
             var videoID = model.models[i].attributes.videoId;
             exportFile(inFile, outFile, videoID);
         }
-        console.print(model.length + ' videos will be exported.');
+        console.log(model.length + ' videos will be exported.');
     } else {
         console.error('No remaining labeled videos to export', {});        
     }
